@@ -37,7 +37,7 @@ def random_training_set(chunk_len, batch_size):
     inp = torch.LongTensor(batch_size, chunk_len)
     target = torch.LongTensor(batch_size, chunk_len)
     for bi in range(batch_size):
-        start_index = random.randint(0, file_len - chunk_len)
+        start_index = random.randint(0, file_len - chunk_len-1)
         end_index = start_index + chunk_len + 1
         chunk = file[start_index:end_index]
         inp[bi] = char_tensor(chunk[:-1])
@@ -63,7 +63,7 @@ def train(inp, target):
     loss.backward()
     decoder_optimizer.step()
 
-    return loss.data[0] / args.chunk_len
+    return loss.item() / args.chunk_len
 
 def save():
     save_filename = os.path.splitext(os.path.basename(args.filename))[0] + '.pt'
